@@ -1,6 +1,6 @@
 package extractSharpestPlane_jnh;
 /** ===============================================================================
-* ChannelSplitter_JNH.java Version 0.0.1
+* ExtractSharpestPlane_JNH.java Version 0.0.1
 * 
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -122,8 +122,7 @@ public void run(String arg) {
 	
 	gd.setInsets(5,0,0);	gd.addStringField("Series to be processed (if multi-series files are loaded via BioFormats plugin)", loadSeries);
 	gd.setInsets(0,0,0);	gd.addMessage("Notes:", InstructionsFont);
-	gd.setInsets(0,0,0);	gd.addMessage("1. If not 'ALL' series shall be processed, enter the series numbers separated by commas.", InstructionsFont);
-	gd.setInsets(0,0,0);	gd.addMessage("E.g., entering '1,7' will process series 1 and 7.", InstructionsFont);
+	gd.setInsets(0,0,0);	gd.addMessage("1. If not 'ALL' series shall be processed, enter the series numbers separated by commas. E.g., enter '1,7' to process series 1 and 7.", InstructionsFont);
 	gd.setInsets(0,0,0);	gd.addMessage("2. If only series whose title starts with 'Series' shall be processed, enter 'SERIES'.", InstructionsFont);
 	
 	gd.setInsets(5,0,0);
@@ -132,21 +131,21 @@ public void run(String arg) {
 		gd.setInsets(0,0,0);
 	}
 
-	gd.setInsets(5,0,0);
+	gd.setInsets(5,0,0);	gd.addMessage("Output settings", SubHeadingFont);
+	
+	gd.setInsets(0,0,0);
 	for(int i = 0; i < colorsSelected.length; i++) {
 		gd.addChoice("Color for channel " + (i+1) + ":", Colors, colorsSelected [i]);
 		gd.setInsets(0,0,0);
 	}
 	
 	gd.setInsets(5,0,0); 	gd.addNumericField("Include planes before sharpest plane:", addPlanesBefore, 0);
-	gd.setInsets(5,0,0); 	gd.addNumericField("Include planes before sharpest plane:", addPlanesAfter, 0);
-	gd.setInsets(0,0,0);		gd.addMessage("If planes before / after sharpest plane are included, a maximum projection is created", InstructionsFont);
-	gd.setInsets(0,0,0);		gd.addMessage( "of the planes before / after the sharpest plane.", InstructionsFont);
+	gd.setInsets(5,0,0); 	gd.addNumericField("Include planes after sharpest plane:", addPlanesAfter, 0);
+	gd.setInsets(0,0,0);		gd.addMessage("If planes before / after are included, a maximum projection is created based on the planes before / after.", InstructionsFont);
 	
 	
-	gd.setInsets(10,0,0);	gd.addMessage("Output settings", SubHeadingFont);
-	gd.setInsets(0,0,0);	gd.addCheckbox("save date in output file names", saveDate);
-	gd.setInsets(0,0,0);	gd.addCheckbox("save series name in output file names", saveSeriesName);
+	gd.setInsets(5,0,0);		gd.addCheckbox("save date in output file names", saveDate);
+	gd.setInsets(0,0,0);		gd.addCheckbox("save series name in output file names", saveSeriesName);
 	gd.showDialog();
 	//show Dialog-----------------------------------------------------------------
 
@@ -549,9 +548,9 @@ public void run(String arg) {
 			
 			String filePrefix;
 			if(name[task].contains(".")){
-				filePrefix = name[task].substring(0,name[task].lastIndexOf(".")) + "_CS";
+				filePrefix = name[task].substring(0,name[task].lastIndexOf(".")) + "_Sh";
 			}else{
-				filePrefix = name[task] + "_CS";
+				filePrefix = name[task] + "_Sh";
 			}
 			
 			if(saveDate){
@@ -576,7 +575,26 @@ public void run(String arg) {
 						+ "	Starting date:	" + FullDateFormatter.format(startDate));
 			tp1.append("Image name:	" + name[task]);
 			tp1.append("");
-			tp1.append("Processing settings:");
+			tp1.append("Settings:");
+			tp1.append("	Add Planes Before Sharpest Plane:	" + dformat0.format(addPlanesBefore));
+			tp1.append("	Add Planes After Sharpest Plane:	" + dformat0.format(addPlanesAfter));
+			tp1.append("	Channel	Selected	Color");
+			String appText;
+			for(int c = 0; c < channelSelected.length; c++) {
+				if(c == imp.getNChannels()) {
+					break;
+				}
+				appText = "	" + (c+1);
+				if(channelSelected [c]) {
+					appText += "	Y";
+				}else {
+					appText += "	N";
+				}
+				appText += "	" + colorsSelected [c];
+				tp1.append(appText);
+			}
+			tp1.append("");
+			tp1.append("Results of sharpness measurements:");
 		//start metadata file
 			
 		//processing
@@ -592,10 +610,10 @@ public void run(String arg) {
 			}
 			for(int s = 0; s < sd.length; s++) {
 				if(s == sharpestPlane) {
-					tp1.append("SHARPEST	" + dformat6.format(sd [s]));
+					tp1.append("SHARPEST	" + dformat0.format(s) + "	" + dformat6.format(sd [s]));
 					
 				}else {
-					tp1.append("	" + dformat6.format(sd [s]));
+					tp1.append("	" + dformat0.format(s) + "	" + dformat6.format(sd [s]));
 					
 				}
 			}
@@ -690,7 +708,7 @@ private ImagePlus getPlaneOrMaxOfPlanesWithinRange(ImagePlus imp, int plane){
 	
 	int indexNew = 0, start = plane-addPlanesBefore-1, end = plane+addPlanesAfter-1;
 	if(start < 0)					start = 0;
-	if(end < (imp.getNSlices()-1))	end = imp.getNSlices()-1;
+	if(end > (imp.getNSlices()-1))	end = imp.getNSlices()-1;
 	String activeChannels = "";
 	double max = 0.0;	
 	
@@ -723,7 +741,7 @@ private void changeColors(ImagePlus impOut){
 	for(int c = 0; c < colorsSelected.length; c++) {
 		if(c == impOut.getNChannels()) break;
 		impOut.setC(c+1);
-		if(!colorsSelected.equals("ORIGINAL")){
+		if(!colorsSelected[c].equals("ORIGINAL")){
 			IJ.run(impOut, colorsSelected [c], "");
 			activeChannels = "1" + activeChannels;
 		}else {
