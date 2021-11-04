@@ -4,8 +4,13 @@ ExtractSharpestPlane_JNH is an ImageJ/FIJI plugin to extract the sharpest plane 
 
 The plugin has been originally developed to be included in high-throughput analysis of images acquired with a Zeiss Cell Discoverer (CD7). Here, the plugin can be used to automatically extract images from .czi files and extract the sharpest plane from each image stack. This works better than performing the same with the integration in the CD7 software, as with this plugin the sharpest plane is detected for each image individually and does not need to be specified for all images together. Thus, the plugin delivers the sharpest possible images for each image stack.
 
-## Author and copyright
+## Copyright
 (c) 2021, Jan N. Hansen
+
+Contact: jan.hansen (at) uni-bonn.de
+
+## Licenses
+The plugin and the source code are published under the [GNU General Public License v3.0](https://github.com/hansenjn/ExtractSharpestPlane_JNH/blob/master/LICENSE).
 
 ## How to use it
 ### Installing the plugin
@@ -23,15 +28,19 @@ To launch the plugin, go to the plugins menu entry _Plugins > JNH > Custom > ext
   - Active image in FIJI: the currently front-most image opened in FIJI will be processed
   - All images open in FIJI: all images that are open in FIJI will be processed
 
+
+Note: The software can process only saved images – every image to be processed needs to be saved on the hard disk before it can be processed. This is required because the plugin needs information on a path where it shall store the output files. Only saved images can provide that path in ImageJ/FIJI. If you process the image in ImageJ/FIJI and subject an unsaved image to the plugin, an error message will be thrown and the plugin stops.
+
+
 <p align="center">
    <img src="https://user-images.githubusercontent.com/27991883/140375269-f5b18b17-37e2-420c-a57a-38cef3d5edfe.png">
 </p>
 
 <p align="center">
    <img src="https://user-images.githubusercontent.com/27991883/140384450-2712facf-397d-4aab-8f93-cf56b03844e3.png">
+   <img src="https://user-images.githubusercontent.com/27991883/140390291-0e82a21f-4106-48f3-b2d5-1d5547baed65.png">
+   <img src="https://user-images.githubusercontent.com/27991883/140390294-92ea9969-ed04-4156-a95a-3309e53f8c01.png">
 </p>
-
-Note that the software can process only saved images – every image to be processed needs to be saved on the hard disk before it can be processed. This is required because the plugin needs information on a path where it shall store the output files. Only saved images can provide that path in ImageJ/FIJI. If you process the image in ImageJ/FIJI and subject an unsaved image to the plugin, an error message will be thrown and the plugin stops.
 
 **Series to be processed:** If you are running this plugin on FIJI, you can make use of the BioFormats plugin to open microscopy files. These might contain multiple series in one file. In the field you can specify specific series you want to have processed only (separate them with a comma) or you type *ALL* to process all contained series (= images). Alternatively, you may also enter *SERIES* to process only images in the file that are entitled with a name beginning with "Series".
 
@@ -53,7 +62,7 @@ For example, if the sharpest plane for an image stack of 7 slice images would be
 </p>
 
 **Output file names:** 
-The plugin will save the output image where the input image was stored. The output image will be named by a combination of the input image name and the suffix "\_Sh" and, if the input file contained multiple images, the series number (e.g., "\_s2" for series). 
+The plugin will save the output image where the input image was stored. The output image will be named by a combination of the input image name and the suffix "\_Sh" and, if the input file contained multiple images, the series number (e.g., "\_s2" for the third series (Note: the numbering starts with "s0" for the first series)). 
 
 Of note, the plugin overrides the equally named output images. Thus if you run the plugin on a file repetitively, the previous run may be overriden. This can be prevented by adding the processing date to the suffix through activating the following checkbox:
 <p align="center">
@@ -65,5 +74,26 @@ Furthemore, if it is useful for you, you can also add the series name that is sa
    <img src="https://user-images.githubusercontent.com/27991883/140387004-7958fa9a-0afb-4419-881e-653e8b29d9e9.png">
 </p>
 
+### Running the plugin
+When you have set the settings and start the plugin, the Multi-Task-Manager dialog appears (sometimes it takes a few seconds until it appears, especially when opening files via the BioFormats integration in FIJI). This dialog allows you to follow the progress of processing the input image(s). If you loaded a microscopy file that contains multiple series (e.g., as shown here the file "Example_Inputfile.czi"), each series is shown as an individual task. When the processing is done, the bar text will show "finished!" (and, on Windows computers, the bar will turn green).
+
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/27991883/140389233-522e46f2-293f-4e3d-99be-5d706e97be3e.png">
+</p>
+
+For each processed image/series, two output file wills have been generated at the path, where the respective input image was saved:
+1. A tif image, containing the output image.
+2. A txt file, which stores the settings that were selected for processing by the ExtractSharpestPlane_JNH plugin and the measurement results obtained when determining the sharpest plane.
+
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/27991883/140389453-ac18ad89-0509-4171-9dd9-b62e7868a885.png">
+</p>
+
+The txt file looks, e.g., like this and contains all serttings
+
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/27991883/140389760-6d3521df-18b0-482e-b2bd-764ba0486c2d.png">
+</p>
+
 ## Download
-Download the latest version [here](https://github.com/hansenjn/ExtractSharpestPlane_JNH/releases/).
+Download the latest plugin version [here](https://github.com/hansenjn/ExtractSharpestPlane_JNH/releases/).
