@@ -1,11 +1,6 @@
 package extractSharpestPlane_jnh;
 /**
- * This class wraps the functionality to select multiple files from the system
- * by a gui. It extends the OpenFilesDialog ("Multi-Taks-Manager") by
- * adding an function to select files containing certain pattern (regex or
- * non-regex) in all subdirectories of a chosen root directory.
- * 
- * Parts of the code were inherited from MotiQ (https://github.com/hansenjn/MotiQ)
+ * This code was inherited from MotiQ (https://github.com/hansenjn/MotiQ)
  * and CiliaQ (https://github.com/hansenjn/CiliaQ).
  * 
  * @author Jan Niklas Hansen and Sebastian Rassmann *

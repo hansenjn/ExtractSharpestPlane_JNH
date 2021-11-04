@@ -1,6 +1,6 @@
 package extractSharpestPlane_jnh;
 /** ===============================================================================
-* ExtractSharpestPlane_JNH.java Version 0.0.1
+* ExtractSharpestPlane_JNH.java Version 0.0.2
 * 
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -14,7 +14,7 @@ package extractSharpestPlane_jnh;
 * See the GNU General Public License for more details.
 *  
 * Copyright (C) Jan Niklas Hansen
-* Date: May 07, 2021 (This Version: May 7, 2021)
+* Date: May 07, 2021 (This Version: November 4, 2021)
 *   
 * For any questions please feel free to contact me (jan.hansen@uni-bonn.de).
 * =============================================================================== */
@@ -41,7 +41,7 @@ import loci.plugins.in.ImporterOptions;
 public class ExtractSharpestPlane_Main implements PlugIn, Measurements {
 	//Name variables
 	static final String PLUGINNAME = "Extract Sharpest Plane JNH";
-	static final String PLUGINVERSION = "0.0.1";
+	static final String PLUGINVERSION = "0.0.2";
 	
 	//Fix fonts
 	static final Font SuperHeadingFont = new Font("Sansserif", Font.BOLD, 16);
@@ -115,36 +115,39 @@ public void run(String arg) {
 	//show Dialog-----------------------------------------------------------------
 	//.setInsets(top, left, bottom)
 	gd.setInsets(0,0,0);	gd.addMessage(PLUGINNAME + ", Version " + PLUGINVERSION + ", \u00a9 2021 JN Hansen", SuperHeadingFont);	
-	gd.setInsets(5,0,0);	gd.addChoice("process ", taskVariant, selectedTaskVariant);
+	gd.setInsets(0,0,0);	gd.addChoice("process ", taskVariant, selectedTaskVariant);
 
 	gd.setInsets(0,0,0);	gd.addMessage("The plugin processes .tif images or calls a BioFormats plugin to open different formats.", InstructionsFont);
 	gd.setInsets(0,0,0);	gd.addMessage("The BioFormats plugin is preinstalled in FIJI / can be manually installed to ImageJ.", InstructionsFont);
 	
-	gd.setInsets(5,0,0);	gd.addStringField("Series to be processed (if multi-series files are loaded via BioFormats plugin)", loadSeries);
+	gd.setInsets(0,0,0);	gd.addStringField("Series to be processed (if multi-series files loaded via BioFormats plugin)", loadSeries);
 	gd.setInsets(0,0,0);	gd.addMessage("Notes:", InstructionsFont);
 	gd.setInsets(0,0,0);	gd.addMessage("1. If not 'ALL' series shall be processed, enter the series numbers separated by commas. E.g., enter '1,7' to process series 1 and 7.", InstructionsFont);
 	gd.setInsets(0,0,0);	gd.addMessage("2. If only series whose title starts with 'Series' shall be processed, enter 'SERIES'.", InstructionsFont);
-	
-	gd.setInsets(5,0,0);
+
+	gd.setInsets(5,0,0);	gd.addMessage("Channels to be used for determining the sharpest plane", SubHeadingFont);
+	gd.setInsets(0,0,0);
 	for(int i = 0; i < channelSelected.length; i++) {
 		gd.addCheckbox("use channel " + (i+1) + " for calculation", channelSelected [i]);
 		gd.setInsets(0,0,0);
 	}
 
-	gd.setInsets(5,0,0);	gd.addMessage("Output settings", SubHeadingFont);
+	gd.setInsets(5,0,0);	gd.addMessage("Color settings", SubHeadingFont);
 	
 	gd.setInsets(0,0,0);
 	for(int i = 0; i < colorsSelected.length; i++) {
 		gd.addChoice("Color for channel " + (i+1) + ":", Colors, colorsSelected [i]);
 		gd.setInsets(0,0,0);
 	}
-	
-	gd.setInsets(5,0,0); 	gd.addNumericField("Include planes before sharpest plane:", addPlanesBefore, 0);
-	gd.setInsets(5,0,0); 	gd.addNumericField("Include planes after sharpest plane:", addPlanesAfter, 0);
+
+	gd.setInsets(0,0,0);		gd.addMessage("Projection around the sharpest plane", SubHeadingFont);
+	gd.setInsets(0,0,0); 	gd.addNumericField("Include planes before sharpest plane:", addPlanesBefore, 0);
+	gd.setInsets(0,0,0); 	gd.addNumericField("Include planes after sharpest plane:", addPlanesAfter, 0);
 	gd.setInsets(0,0,0);		gd.addMessage("If planes before / after are included, a maximum projection is created based on the planes before / after.", InstructionsFont);
 	
-	
-	gd.setInsets(5,0,0);		gd.addCheckbox("save date in output file names", saveDate);
+
+	gd.setInsets(5,0,0);		gd.addMessage("Output file names", SubHeadingFont);
+	gd.setInsets(0,0,0);		gd.addCheckbox("save date in output file names", saveDate);
 	gd.setInsets(0,0,0);		gd.addCheckbox("save series name in output file names", saveSeriesName);
 	gd.showDialog();
 	//show Dialog-----------------------------------------------------------------
@@ -809,15 +812,6 @@ private int getNumberOfSeries(ImporterOptions options) throws FormatException, I
 	ImportProcess process = new ImportProcess(options);
 	if (!process.execute()) return -1;
 	return process.getSeriesCount();
-}
-
-/**
- * @return width and height of a specific @param series (0 <= series < number of series)
- * */
-private int [] getWidthHeigth(ImporterOptions options, int series) throws FormatException, IOException{
-	ImportProcess process = new ImportProcess(options);
-	if (!process.execute()) return new int [] {-1, -1};
-	return new int [] {process.getCropRegion(series).width, process.getCropRegion(series).height};
 }
 
 /**
