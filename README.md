@@ -15,6 +15,9 @@ Contact: jan.hansen (at) uni-bonn.de
 ## Licenses
 The plugin and the source code are published under the [GNU General Public License v3.0](https://github.com/hansenjn/ExtractSharpestPlane_JNH/blob/master/LICENSE).
 
+## Download
+Download the latest plugin version [here](https://github.com/hansenjn/ExtractSharpestPlane_JNH/releases/).
+
 ## How to use it
 ### Installing the plugin
 Download the latest version [here](https://github.com/hansenjn/ExtractSharpestPlane_JNH/releases/). Install it into FIJI or ImageJ by drag and drop into the status bar of the ImageJ/FIJI window. Confirm the upcoming dialog and restart the software. Now, the plugin is installed. It can be launched by going to the menu entry _Plugins > JNH > Custom > extract sharpest plane (vX.X.X)_.
@@ -97,6 +100,3 @@ The txt file looks, e.g., like this and contains all serttings
 <p align="center">
    <img src="https://user-images.githubusercontent.com/27991883/140389760-6d3521df-18b0-482e-b2bd-764ba0486c2d.png">
 </p>
-
-## Download
-Download the latest plugin version [here](https://github.com/hansenjn/ExtractSharpestPlane_JNH/releases/).
