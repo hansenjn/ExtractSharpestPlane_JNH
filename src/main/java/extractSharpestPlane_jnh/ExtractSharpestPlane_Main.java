@@ -90,12 +90,8 @@ public class ExtractSharpestPlane_Main implements PlugIn, Measurements {
 	
 	boolean saveSeriesName = false;
 	
-	int addPlanesBefore = 0, addPlanesAfter = 0;
-	
+	int addPlanesBefore = 0, addPlanesAfter = 0;	
 	//-----------------define params for Dialog-----------------
-	
-	//Variables for processing of an individual task
-//		enum channelType {PLAQUE,CELL,NEURITE};
 	
 public void run(String arg) {	
 	//Initialize
@@ -259,7 +255,6 @@ public void run(String arg) {
 		String loadSeriesTemp;
 		String removedFiles = "\n";
 
-//		String filesList = "Files to process:\n";
 		if(selectedTaskVariant.equals(taskVariant[1])){
 			for(int i = tasks-1; i >= 0; i--){
 				IJ.showProgress((tasks-i)/tasks);
@@ -321,7 +316,6 @@ public void run(String arg) {
 							series [j] = seriesTemp [j];
 							seriesName [j] = seriesNameTemp [j];
 							totSeries [j] = totSeriesTemp [j];
-//								filesList += name[j] + "\t" + dir[j] + "\t" + series[j] + "\t" + totSeries[j] + "\n";
 						}
 					}else if(!loadSeries.equals("ALL")){
 						if(loadSeries.equals("SERIES")){
@@ -397,7 +391,6 @@ public void run(String arg) {
 								series [j] = seriesTemp [j];
 								seriesName [j] = seriesNameTemp [j];
 								totSeries [j] = totSeriesTemp [j];
-//									filesList += name[j] + "\t" + dir[j] + "\t" + series[j] + "\t" + totSeries[j] + "\n";
 							}
 						}else {
 							//REMOVE NAME FROM LIST
@@ -438,7 +431,6 @@ public void run(String arg) {
 								series [j] = seriesTemp [j];
 								seriesName [j] = seriesNameTemp [j];
 								totSeries [j] = totSeriesTemp [j];
-//									filesList += name[j] + "\t" + dir[j] + "\t" + series[j] + "\t" + totSeries[j] + "\n";
 							}
 						}
 					}
@@ -480,7 +472,7 @@ public void run(String arg) {
 			}
 		
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-//------------------------------CELL MEASUREMENT------------------------------
+//---------------------------------RUN TASKS----------------------------------
 //&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 	for(int task = 0; task < tasks; task++){
@@ -543,9 +535,6 @@ public void run(String arg) {
 		   	
 			imp.lock();
 			
-	   	/******************************************************************
-		*** 						PROCESSING							***	
-		*******************************************************************/
 		//Define Output File Names
 			Date currentDate = new Date();
 			
